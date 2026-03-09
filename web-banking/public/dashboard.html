@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SecureBank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header i {
+            font-size: 32px;
+            color: white;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .sidebar-header h3 {
+            color: white;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .greeting {
+            color: #333;
+        }
+
+        .greeting h4 {
+            margin: 0;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .greeting p {
+            margin: 5px 0 0 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .account-info {
+            display: flex;
+            gap: 30px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .account-info div {
+            flex: 1;
+        }
+
+        .account-info-label {
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .account-info-value {
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            color: #667eea;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .action-btn i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .action-btn span {
+            font-weight: 600;
+            display: block;
+            font-size: 14px;
+        }
+
+        /* Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Transaction Form */
+        .transaction-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 12px;
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        /* Transactions List */
+        .transactions-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .transaction-item {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .transaction-type i {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .transaction-type i.deposit {
+            background: #4caf50;
+        }
+
+        .transaction-type i.withdraw {
+            background: #ff9800;
+        }
+
+        .transaction-type i.transfer {
+            background: #2196f3;
+        }
+
+        .transaction-desc {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .transaction-amount {
+            text-align: right;
+        }
+
+        .transaction-money {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .transaction-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .transfer-amount.negative {
+            color: #ff6b6b;
+        }
+
+        .transfer-amount.positive {
+            color: #4caf50;
+        }
+
+        /* Alert */
+        .alert-msg {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background-color: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+        }
+
+        .alert-success {
+            background-color: #efe;
+            border: 1px solid #cfc;
+            color: #3c3;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            margin: 0;
+        }
+
+        /* Settings */
+        .settings-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                width: 250px;
+                z-index: 1000;
+                transition: all 0.3s;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .balance-amount {
+                font-size: 32px;
+            }
+
+            .account-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" style="min-height: 100vh;">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-university"></i>
+                    <h3>SecureBank</h3>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a class="menu-item active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a class="menu-item" onclick="showSection('deposit')"><i class="fas fa-plus-circle"></i> Deposit</a></li>
+                    <li><a class="menu-item" onclick="showSection('withdraw')"><i class="fas fa-minus-circle"></i> Withdraw</a></li>
+                    <li><a class="menu-item" onclick="showSection('transfer')"><i class="fas fa-exchange-alt"></i> Transfer</a></li>
+                    <li><a class="menu-item" onclick="showSection('transactions')"><i class="fas fa-history"></i> Transactions</a></li>
+                    <li><a class="menu-item" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 main-content">
+                <!-- Top Bar -->
+                <div class="top-bar">
+                    <div class="greeting">
+                        <h4 id="greetingText">Welcome!</h4>
+                        <p id="greetingDate"></p>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div>
+                            <p style="margin: 0; font-size: 14px; color: #999;">Logged in as</p>
+                            <p style="margin: 0; font-weight: 600; color: #333;" id="userNameDisplay">User</p>
+                        </div>
+                        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alertBox" class="alert-msg"></div>
+
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="content-section active">
+                    <div class="balance-card">
+                        <div class="balance-label">Your Available Balance</div>
+                        <div class="balance-amount" id="balanceDisplay">$0.00</div>
+                        <div class="account-info">
+                            <div>
+                                <div class="account-info-label">Account Number</div>
+                                <div class="account-info-value" id="accountDisplay">-</div>
+                            </div>
+                            <div>
+                                <div class="account-info-label">Account Holder</div>
+                                <div class="account-info-value" id="holderDisplay">-</div>
+                            </div>
+                            <div>
+                                <div class="account-info-label">Member Since</div>
+                                <div class="account-info-value" id="memberDisplay">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h5 style="color: #333; margin-bottom: 20px;">Quick Actions</h5>
+                        <div class="quick-actions">
+                            <button class="action-btn" onclick="showSection('deposit')">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Deposit</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('withdraw')">
+                                <i class="fas fa-minus-circle"></i>
+                                <span>Withdraw</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('transfer')">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>Transfer</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('transactions')">
+                                <i class="fas fa-history"></i>
+                                <span>History</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 style="color: #333; margin-bottom: 20px;">Recent Transactions</h5>
+                        <div id="recentTransactions" class="transactions-container">
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>No transactions yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deposit Section -->
+                <div id="deposit" class="content-section">
+                    <h3 class="section-title"><i class="fas fa-plus-circle"></i> Deposit Money</h3>
+                    <div class="transaction-form">
+                        <form id="depositForm">
+                            <div class="form-group">
+                                <label class="form-label">Amount (in dollars)</label>
+                                <input type="number" class="form-control" id="depositAmount" placeholder="Enter amount" step="0.01" min="0.01" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-check-circle"></i> Deposit
+                            </button>
+                            <button type="button" class="btn-cancel" onclick="showSection('dashboard')">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Withdraw Section -->
+                <div id="withdraw" class="content-section">
+                    <h3 class="section-title"><i class="fas fa-minus-circle"></i> Withdraw Money</h3>
+                    <div class="transaction-form">
+                        <form id="withdrawForm">
+                            <div class="form-group">
+                                <label class="form-label">Amount (in dollars)</label>
+                                <input type="number" class="form-control" id="withdrawAmount" placeholder="Enter amount" step="0.01" min="0.01" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-check-circle"></i> Withdraw
+                            </button>
+                            <button type="button" class="btn-cancel" onclick="showSection('dashboard')">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Transfer Section -->
+                <div id="transfer" class="content-section">
+                    <h3 class="section-title"><i class="fas fa-exchange-alt"></i> Transfer Money</h3>
+                    <div class="transaction-form">
+                        <form id="transferForm">
+                            <div class="form-group">
+                                <label class="form-label">Recipient Account Number</label>
+                                <input type="text" class="form-control" id="transferTo" placeholder="Enter recipient account" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Amount (in dollars)</label>
+                                <input type="number" class="form-control" id="transferAmount" placeholder="Enter amount" step="0.01" min="0.01" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-check-circle"></i> Transfer
+                            </button>
+                            <button type="button" class="btn-cancel" onclick="showSection('dashboard')">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Transactions Section -->
+                <div id="transactions" class="content-section">
+                    <h3 class="section-title"><i class="fas fa-history"></i> Transaction History</h3>
+                    <div id="transactionsList" class="transactions-container">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No transactions yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings" class="content-section">
+                    <h3 class="section-title"><i class="fas fa-cog"></i> Account Settings</h3>
+                    <div class="settings-form">
+                        <h5 style="margin-bottom: 20px; color: #333;">Change PIN</h5>
+                        <form id="settingsForm">
+                            <div class="form-group">
+                                <label class="form-label">Current PIN</label>
+                                <input type="password" class="form-control" id="oldPin" placeholder="Enter current PIN" maxlength="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">New PIN (4 digits)</label>
+                                <input type="password" class="form-control" id="newPin" placeholder="Enter new PIN" maxlength="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm New PIN</label>
+                                <input type="password" class="form-control" id="confirmNewPin" placeholder="Confirm new PIN" maxlength="4" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-lock"></i> Change PIN
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

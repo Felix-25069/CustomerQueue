@@ -1,0 +1,27 @@
+{
+  "accounts": {
+    "1234567": {
+      "accountNumber": "1234567",
+      "name": "Felix Otieno",
+      "email": "nyajiedofelix@gmail.com",
+      "pin": "3027",
+      "balance": 1200,
+      "createdAt": "2026-03-09T06:47:17.556Z",
+      "transactions": [
+        {
+          "type": "DEPOSIT",
+          "amount": 1200,
+          "timestamp": "2026-03-09T06:48:09.054Z",
+          "description": "Cash deposit",
+          "balanceAfter": 1200
+        }
+      ]
+    }
+  },
+  "sessions": {
+    "553b8589-4c9e-417e-a23e-d8546aba0d6f": {
+      "accountNumber": "1234567",
+      "loginTime": "2026-03-09T06:47:39.515Z"
+    }
+  }
+}
